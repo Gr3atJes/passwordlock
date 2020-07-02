@@ -135,4 +135,75 @@ def main():
                               key_word = input().lower()
 
                               if key_word == 'cc':
-                                  print
+                                  print("Save a new credential")
+                                  platform = input("Input the platform:")
+                                  print("\n")
+                                  username = input("Input your username:")
+                                  print("\n")
+                                  email = input("Input your email:")
+                                  print("\n")
+                                  option = input("Would you wish to have Vault generate a password for you? Provide number only."))
+                                  if option.startswith("y"):
+                                      print()
+                                      desired_len = int(input("How long would you like your password to be? Provide number only. "))
+                                      password = generate_password(desired_len)
+                                  else:
+                                      print("\n")
+                                      password = getpass("Enter your password: ")
+
+                                  save_credential(create_credential(platform,username,email,password))
+                                  print('\n')
+                                  cprint(f "NEW CREDENTIALS FOR {platform} CREATED!", "green",attrs= ['bold'])
+                                  print("_"*50)
+                                  print('\n')
+
+                                 elif key_word == 'dc':
+
+                                     if display_credentials():
+                                         print("HERE ARE YOUR CREDENTIALS")
+                                         print('\n')
+
+                                         for cred in display_credentials():
+                                             cprint(
+                                                 f"""
+                                                 -------------------------
+                                                 Platform --- {cred.platform}
+                                                 Username --- {cred.username}
+                                                 Email --- {cred.email}
+                                                 Password --- {cred.password}
+                                                 ---------------
+                                                 ""","magenta"
+                                             )
+                                             print('\n')
+                                             else:
+                                                 print('\n')
+                                                 cprint("You dont seem to have any credentials saved yet","yellow")
+                                                 print("_"*50)
+                                                 print('\n')
+
+                                            elif key_word == 'fc':
+                                                print("Enter the platform you want to search for")
+                                                print("\n")
+                                                platform_search = input()
+                                                if check_existing_credential(platform_search):
+                                                    search_credential = find_credentials(platform_search)
+                                                    cprint(
+                                                        f"""
+                                                        ----------------
+                                                        Platform --- {search_credential.platform}
+                                                        Username --- {search_credential.username}
+                                                        Email --- {search_credential.email}
+                                                        Password --- {search_credential.password}
+                                                        ---------------
+                                                        ""","magenta")
+                                                        print("_"*50)
+                                                        else:
+                                                            cprint("The credential does not exist", "red")
+
+                                            elif key_word == "cp":
+                                                print("Enter the platform whose password you would like copied")                                                        
+
+                                                    )
+
+
+                                             )
