@@ -1,18 +1,33 @@
 class User:
-    '''
-    class that generates new instance of user 
-    '''
+    """
+    Args:
+    login_name: To sign into the system:
+    pin: To sign into the application:
+    """
 
     user_list = []
 
-    def __init__(self,user_name,password):
-        self.user_name = user_name
-        self.password = password
+    def __init__(self,login_name,pin):
+        self.login_name = logic_name
+        self.pin = pin
 
     def save_user(self):
 
-        '''
-        save_user method saves a new user objects to the user_list
-        '''
+        """
+        this method appends new object to user_list
+        """
+        
 
         User.user_list.append(self)
+
+    @classmethod
+    def user_auth(cls,name,pin):
+        """
+        this method returns a boolean True if the username and pin inputted matches those of a user in the user_list
+        """
+
+        for user in cls.user_list:
+            if user.login_name == name and user.pin == pin:
+                return True
+        return False
+

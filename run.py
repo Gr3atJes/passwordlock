@@ -82,6 +82,7 @@ def main():
         ""","blue")
     print("What would you like to do?")
     code = input().lower()
+
     if code == "lg":
         print("Do you have an account? Y or N")
         decision = input().lower()
@@ -97,12 +98,14 @@ def main():
             sign_in_name = input("Enter your username:")
             sign_in_pin = getpass("Enter your pin:")
             save_user(create_user(login_name, login_pin))
+
             if authenticate_user(sign_in_name, sign_in_pin):
                 print("Please wait...")
                 time.sleep(1.5)
                 cprint("SUCCESSFULY MADE IT TO THE SYSTEM","green",attrs=['bold'])
                 print("\n")
                 pass 
+
             else:
                 sign_in_name = input("Enter your username:")
                 sign_in_pin = getpass("Enter your pin:")
@@ -131,6 +134,7 @@ def main():
                          'ex' - logs you out lol
                          'help' - helps a user around the system
                                   ""","blue")
+
                               print(f"At your service {sign_in_name}, what task would you like to perform?")
                               key_word = input().lower()
 
@@ -143,10 +147,12 @@ def main():
                                   email = input("Input your email:")
                                   print("\n")
                                   option = input("Would you wish to have Vault generate a password for you? Provide number only."))
+
                                   if option.startswith("y"):
                                       print()
                                       desired_len = int(input("How long would you like your password to be? Provide number only. "))
                                       password = generate_password(desired_len)
+
                                   else:
                                       print("\n")
                                       password = getpass("Enter your password: ")
@@ -174,6 +180,7 @@ def main():
                                                  ---------------
                                                  ""","magenta"
                                              )
+
                                              print('\n')
                                              else:
                                                  print('\n')
@@ -201,9 +208,60 @@ def main():
                                                             cprint("The credential does not exist", "red")
 
                                             elif key_word == "cp":
-                                                print("Enter the platform whose password you would like copied")                                                        
+                                                print("Enter the platform whose password you would like copied")
+                                                platform_find = input()
+                                                print("Loading...")
+                                                if check_existing_credential(platform_find):
+                                                    search_credential = find_credentials(platform_find)
+                                                    pyperclip.copy(search_credential.password)
+                                                    time.sleep(1.5)
+                                                    print("\n")
+                                                    cprint(f"PASSWORD FOR {search_credential.platform} HAS BEEN COPIED", "green",attrs=['bold'])
+                                                    print("_"*50)
 
-                                                    )
+                                                else:
+                                                    cprint("The platform you entered does not exist","yellow")
+                                                    print("_"*50)
 
+                                                elif key_word  == "dl":
+                                                    print("Enter the platform whose credentials you'd like to delete")
+                                                    platfom_delete = input()
+                                                    if check_existing_credential(platform_delete):
+                                                        print("Please wait...")
+                                                        platform_creds = find_credentials(platform_delete)
+                                                        delete_credential(platform_creds)
+                                                        time.sleep(1.5)
+                                                        cprint(f"CREDENTIALS FOR {platform_creds.platform} SUCCESSFULLY DELETED","green",attrs=['bold'])
+                                                    else:
+                                                        cprint("The credential does not exist","red")
+                                                elif key_word == "ex":
+                                                       print(f"Have a nice day {login_name}")
+                                                       print("_" *50)
+                                                       break
 
-                                             )
+                                                elif key_word == "help":
+                                                    cprint (
+    """Sorry to here youre stuck
+    please refer to what is below
+    ""","blue")
+    else:
+        cprint ("You entered an unknown keyword.Please use the provided keywords.Type '-help' if yourre stuck","yellow")
+        print("_"*50)
+
+    else:
+        cprint("Oops,you entered an unknown keyword. Please use the provided keywords. Type '-help' if youre stuck","yellow")
+        print("\n")
+        break
+
+    elif code == "xx":
+        cprint(
+    """
+    Goodbye
+    ""","blue")
+    break
+
+else:
+    cprint("You entered an unknown short code, please try again","yellow")
+
+    if __name__ == '__main__':
+        main()
