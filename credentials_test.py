@@ -41,4 +41,23 @@ class TestCredential(unittest.TestCase):
         """
         test_save_multiple_credentials to check if we can save multiple credential objects to our credential list
         """
-        
+        self.new_credential.save_credential()
+        test_credential = Credential("Bitbucket","user2","u@u.com","123asdf") #new contact
+        test_credential.save_credential()
+        self.assertEqual(len(Credential.credential_list), 2)
+
+    def test_delete_credential(self):
+        """
+        test_delete_credential to test if we can remove a credential from the credential list
+        """
+        self.new_credential.save_credential()
+        test_credential = Credential("Bitbucket","user2", "u@u.com","123asdf")
+        test_credential.save_credential()
+
+        self.new_credential.delete_credential() # Deleting a contact object
+        self.assertEqual(len(Credential.credential_list), 1)
+
+    def test_find_by_platform(self):
+        """
+        test to check if we can find a credential by platform name and display information
+        """
