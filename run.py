@@ -24,30 +24,39 @@ def authenticate_user(username,password):
 
 def create_credential(platform,username,email,password):
     """
-
     Function to create a new credential
-
     """
     new_credential = Credential(platform,username,email,password)
     return new_credential
+
+
+def save_credential(credential):
+    """
+    Function to save credential
+    """
+    credential.save_credential()
+
 
 def delete_credential(credential):
     """
     Function to delete a credential
     """
-    credential.delete_Credential()
+    credential.delete_credential()
+
 
 def find_credentials(platform):
     """
-    Function that finds a credential by platform name and returns the
+    Function that finds a credential by platform name and returns the credentials
     """
     return Credential.find_by_platform(platform)
 
+
 def check_existing_credential(platform):
     """
-    Function that checks if a credential exists with that number and return a Boolean
+    Function that check if a credential exists with that number and return a Boolean
     """
     return Credential.credential_exists(platform)
+
 
 def display_credentials():
     """
@@ -57,211 +66,218 @@ def display_credentials():
 
 def copy_password(platform):
     """
-    Function that copies the password
+    Function which copies the password of the platform
+    taken as an argument
     """
     return Credential.copy_password(platform)
 
 def generate_password(length):
     """
     Function which generates a random password
-
     Args:
-        The desired password length
+        the desired password length
     """
     return Credential.generate_password(length)
 
+
 def main():
-    cprint("""
-    Yoo welcome to the password locker.Enhanced Security
-    ""","blue")
+    cprint("""  
+    GREETINGS USER, WELCOME TO THE PASSWORDLOCKER                                        
+                
+        ""","blue")
     while True:
         cprint("""
-        Use the short lines to go through the system
-        'lg' - login
-        'xx' - Close app
-        ""","blue")
-    print("What would you like to do?")
-    code = input().lower()
+        Use the following short codes to manage your account 
+            'lg' - Login 
+            'xx' - Close app
+            ""","blue")
+        print("What would you like to do?")
+        code = input().lower()
+        if code == "lg":
+            print("Do you have an account? Y or N")
+            decision = input().lower()
 
-    if code == "lg":
-        print("Do you have an account? Y or N")
-        decision = input().lower()
-
-        if decision.startswith("n"):
-            login_name = input("Enter your username:")
-            login_pin = getpass("Enter your pin: ")
-            print("Loading....")
-            time.sleep(1.5)
-            print("\n")
-            cprint("CONGRATS,YOUR ACCOUNT HAS BEEN CREATED","green",attrs=['bold'])
-            print("Sign in into your account")
-            sign_in_name = input("Enter your username:")
-            sign_in_pin = getpass("Enter your pin:")
-            save_user(create_user(login_name, login_pin))
-
-            if authenticate_user(sign_in_name, sign_in_pin):
-                print("Please wait...")
+            if decision.startswith("n"):
+                login_name = input("Enter your username: ")
+                login_pin = getpass("Enter your pin: ")
+                print("Loading ...")
                 time.sleep(1.5)
-                cprint("SUCCESSFULY MADE IT TO THE SYSTEM","green",attrs=['bold'])
                 print("\n")
-                pass 
-
-            else:
-                sign_in_name = input("Enter your username:")
-                sign_in_pin = getpass("Enter your pin:")
-                if authenticate_user(sign_in_name, sign_in_pin):
-                    print("Please wait..")
+                cprint("CONGRATULATIONS, YOUR ACCOUNT HAS BEEN CREATED","green",attrs=['bold'])
+                print("Sign into your new account")
+                sign_in_name = input("Enter your username: ")
+                sign_in_pin = getpass("Enter your pin: ")
+                save_user(create_user(login_name,login_pin))
+                if authenticate_user(sign_in_name,sign_in_pin):
+                    print("Please wait...")
                     time.sleep(1.5)
-                    cprint("Successfully signed in","green",attrs=['bold'])
+                    cprint("SUCCESSFULLY SIGNED IN","green",attrs=['bold'])  
                     print("\n")
                     pass
-                ----------------------
-
+                else:
+                    print("Please wait...")
+                    time.sleep(1.5)
+                    # cprint("Oops, you entered the wrong username/pin, we have to do this again :(","red")
+                    print("\n")
+            else:
+                sign_in_name = input("Enter your username: ")
+                sign_in_pin = getpass("Enter your pin: ")
+                if authenticate_user(sign_in_name,sign_in_pin):
+                    print("Please wait...")
+                    time.sleep(1.5)
+                    cprint("SUCCESSFULLY SIGNED IN","green",attrs=['bold'])  
+                    print("\n")
+                    pass
+                else:
+                    print("Please wait...")
+                    time.sleep(1.5)
+                    # cprint("Oops, you entered the wrong username/pin, we have to do this again :(","red")
+                    print("\n")
             while True:
-                if authenticate_user(sign_in_name, sign_in_pin):
+                if authenticate_user(sign_in_name,sign_in_pin):
                     ####
                     cprint(
                         """
-                        O===[================-
-                        WELCOME TO YOUR PASSWORD LOCKER:
-                        Use the commands to navigate through the system :):
+    O===[====================-
+        
+    WELCOME TO YOUR VAULT:
+    Use the following commands to navigate the application:
+        'cc' - enables you to create an a credential
+        'dc' - displays the credentials you have saved
+        'cp' - copies the password of a given credential
+        'fc' - helps you find a credential by its platform name
+        'dl' - deletes a credential
+        'ex' - logs you out
+        'help' - helps a user around the app
+                        ""","blue")
+                    print(f"At your service {sign_in_name}, what task would you like to perform?")
+                    key_word = input().lower()
 
-                         'cc' - To create a credential
-                         'dc' - displays the credentials you have entered
-                         'cp' - copy the password of a credential
-                         'fc' - helps you find a credential by its platform name
-                         'dl' - deletes a credential
-                         'ex' - logs you out lol
-                         'help' - helps a user around the system
-                                  ""","blue")
+                    if key_word == 'cc':
+                        print("Save a new credential")
+                        platform = input("Input the platform: ")
+                        print("\n")
+                        username = input("Input your username: ")
+                        print("\n")
+                        email = input("Input your email: ")
+                        print("\n")
+                        option = input("Would you wish to have Vault generate a password for you? Y or N ").lower()
+                        if option.startswith("y"):
+                            print()
+                            desired_len = int(input("How long would you like your password to be? Provide number only. "))
+                            password = generate_password(desired_len)
+                        else:
+                            print("\n")
+                            password = getpass("Enter your password: ")
 
-                              print(f"At your service {sign_in_name}, what task would you like to perform?")
-                              key_word = input().lower()
+                        save_credential(create_credential(platform,username,email,password))
+                        print('\n')
+                        cprint(f"NEW CREDENTIALS FOR {platform} CREATED!","green",attrs=['bold'])
+                        print("_"*50)
+                        print('\n')
 
-                              if key_word == 'cc':
-                                  print("Save a new credential")
-                                  platform = input("Input the platform:")
-                                  print("\n")
-                                  username = input("Input your username:")
-                                  print("\n")
-                                  email = input("Input your email:")
-                                  print("\n")
-                                  option = input("Would you wish to have Vault generate a password for you? Provide number only."))
+                    elif key_word == 'dc':
 
-                                  if option.startswith("y"):
-                                      print()
-                                      desired_len = int(input("How long would you like your password to be? Provide number only. "))
-                                      password = generate_password(desired_len)
+                        if display_credentials():
+                            print("HERE ARE YOUR CREDENTIALS")
+                            print('\n')
 
-                                  else:
-                                      print("\n")
-                                      password = getpass("Enter your password: ")
+                            for cred in display_credentials():
+                                cprint(
+                                    f"""
+    --------------------------------------------------
+            Platform --- {cred.platform}               
+            Username --- {cred.username}               
+            Email    --- {cred.email}                  
+            Password --- {cred.password}               
+    --------------------------------------------------
+                                ""","magenta"
+                                )
+                                print('\n')
+                        else:
+                            print('\n')
+                            cprint("You dont seem to have any credentials saved yet","yellow")
+                            print("_"*50)
+                            print('\n')
 
-                                  save_credential(create_credential(platform,username,email,password))
-                                  print('\n')
-                                  cprint(f "NEW CREDENTIALS FOR {platform} CREATED!", "green",attrs= ['bold'])
-                                  print("_"*50)
-                                  print('\n')
+                    elif key_word == 'fc':
+                        print("Enter the platform you want to search for")
+                        print("\n")
+                        platform_search = input()
+                        if check_existing_credential(platform_search):
+                            search_credential = find_credentials(platform_search)
+                            cprint(
+                                f"""
+    -------------------------------------------------------
+        Platform --- {search_credential.platform}               
+        Username --- {search_credential.username}               
+        Email    --- {search_credential.email}                  
+        Password --- {search_credential.password}               
+    -------------------------------------------------------
+                                ""","magenta")
+                            print("_"*50)
+                        else:
+                            cprint("The credential does not exist", "red")
+                    
+                    elif key_word == "cp":
+                        print("Enter the platform whose password you would like copied")
+                        platform_find = input()
+                        print("Loading...")
+                        if check_existing_credential(platform_find):
+                            search_credential = find_credentials(platform_find)
+                            pyperclip.copy(search_credential.password)
+                            time.sleep(1.5)
+                            print("\n")
+                            cprint(f"PASSWORD FOR {search_credential.platform} HAS BEEN COPIED","green",attrs=['bold'])
+                            print("_"*50)
 
-                                 elif key_word == 'dc':
+                        else:
+                            cprint("The platform you entered does not exist","yellow")
+                            print("_"*50)
+                    
+                    elif key_word == "dl":
+                        print("Enter the platform whose credentials you'd like to delete")
+                        platform_delete = input()
+                        if check_existing_credential(platform_delete):
+                            print("Please wait ...")
+                            platform_creds = find_credentials(platform_delete)
+                            delete_credential(platform_creds)
+                            time.sleep(1.5)
+                            cprint(f"CREDENTIALS FOR {platform_creds.platform} SUCCESSFULY DELETED","green",attrs=['bold'])
+                        else:
+                            cprint("The credential does not exist", "red")
 
-                                     if display_credentials():
-                                         print("HERE ARE YOUR CREDENTIALS")
-                                         print('\n')
+                    elif key_word == "ex":
+                        print(f"Have a nice day {login_name}")
+                        print("_"*50)
+                        break
 
-                                         for cred in display_credentials():
-                                             cprint(
-                                                 f"""
-                                                 -------------------------
-                                                 Platform --- {cred.platform}
-                                                 Username --- {cred.username}
-                                                 Email --- {cred.email}
-                                                 Password --- {cred.password}
-                                                 ---------------
-                                                 ""","magenta"
-                                             )
+                    elif key_word == "help":
+                        cprint(
+                        """                       
+    SORRY TO HERE YOU'RE STUCK
+    PLEASE REFER TO WHAT IS BELOW
+                        ""","blue")
 
-                                             print('\n')
-                                             else:
-                                                 print('\n')
-                                                 cprint("You dont seem to have any credentials saved yet","yellow")
-                                                 print("_"*50)
-                                                 print('\n')
+                    else:
+                        cprint("You entered an unknown keyword. Please use the provided keywords. Type '-help' if you're stuck","yellow")
+                        print("_"*50)
 
-                                            elif key_word == 'fc':
-                                                print("Enter the platform you want to search for")
-                                                print("\n")
-                                                platform_search = input()
-                                                if check_existing_credential(platform_search):
-                                                    search_credential = find_credentials(platform_search)
-                                                    cprint(
-                                                        f"""
-                                                        ----------------
-                                                        Platform --- {search_credential.platform}
-                                                        Username --- {search_credential.username}
-                                                        Email --- {search_credential.email}
-                                                        Password --- {search_credential.password}
-                                                        ---------------
-                                                        ""","magenta")
-                                                        print("_"*50)
-                                                        else:
-                                                            cprint("The credential does not exist", "red")
+                else:
+                    cprint("Oops, you entered the wrong username/pin, we have to do this again :(","red",attrs=['bold'])
+                    print("\n")
+                    break
+            
+        elif code == "xx":
+            cprint(
+            """
+            Goodbye
+                                                                      
+            ""","blue")
+            break
 
-                                            elif key_word == "cp":
-                                                print("Enter the platform whose password you would like copied")
-                                                platform_find = input()
-                                                print("Loading...")
-                                                if check_existing_credential(platform_find):
-                                                    search_credential = find_credentials(platform_find)
-                                                    pyperclip.copy(search_credential.password)
-                                                    time.sleep(1.5)
-                                                    print("\n")
-                                                    cprint(f"PASSWORD FOR {search_credential.platform} HAS BEEN COPIED", "green",attrs=['bold'])
-                                                    print("_"*50)
-
-                                                else:
-                                                    cprint("The platform you entered does not exist","yellow")
-                                                    print("_"*50)
-
-                                                elif key_word  == "dl":
-                                                    print("Enter the platform whose credentials you'd like to delete")
-                                                    platfom_delete = input()
-                                                    if check_existing_credential(platform_delete):
-                                                        print("Please wait...")
-                                                        platform_creds = find_credentials(platform_delete)
-                                                        delete_credential(platform_creds)
-                                                        time.sleep(1.5)
-                                                        cprint(f"CREDENTIALS FOR {platform_creds.platform} SUCCESSFULLY DELETED","green",attrs=['bold'])
-                                                    else:
-                                                        cprint("The credential does not exist","red")
-                                                elif key_word == "ex":
-                                                       print(f"Have a nice day {login_name}")
-                                                       print("_" *50)
-                                                       break
-
-                                                elif key_word == "help":
-                                                    cprint (
-    """Sorry to here youre stuck
-    please refer to what is below
-    ""","blue")
-    else:
-        cprint ("You entered an unknown keyword.Please use the provided keywords.Type '-help' if yourre stuck","yellow")
-        print("_"*50)
-
-    else:
-        cprint("Oops,you entered an unknown keyword. Please use the provided keywords. Type '-help' if youre stuck","yellow")
-        print("\n")
-        break
-
-    elif code == "xx":
-        cprint(
-    """
-    Goodbye
-    ""","blue")
-    break
-
-else:
-    cprint("You entered an unknown short code, please try again","yellow")
-
-    if __name__ == '__main__':
-        main()
+        else:
+            cprint("You entered an unknown short code, please try again","yellow")
+        
+if __name__ == '__main__':
+    main()

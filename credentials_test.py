@@ -97,9 +97,10 @@ class TestCredential(unittest.TestCase):
         test to confirm that we are copying the password from a found credential
         """
         self.new_credential.save_credential()
+
         Credential.copy_password("Github")
 
-        self.assertEqual(self.new_credential.password,pyperclip.paster())
+        self.assertEqual(self.new_credential.password,pyperclip.paste())
 
 
     def test_generate_password(self):
