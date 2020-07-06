@@ -61,3 +61,58 @@ class TestCredential(unittest.TestCase):
         """
         test to check if we can find a credential by platform name and display information
         """
+
+        self.new_credential.save_credential()
+        test_credential = Credential("Bitbucket","user2","u@u.com","123asdf")
+        test_credential.save_credential()
+
+
+        found_credential = Credential.find_by_platform("Bitbucket")
+
+
+        self.assertEqual(found_credential.platform, test_credential.platform)
+
+
+    def test_credential_exists(self):
+        """
+        test to check if we can return a Boolean if we cannot find the credentials
+        """
+
+        self.new_credential.save_credential()
+        test_credential = Credential("Bitbucket","user2","u@u.com","123asdf")
+        test_credential.save_credential()
+
+        self.assertTrue(Credential.credential_exists("Bitbucket"))
+
+    def test_display_credentials(self):
+        """
+        method that returns a list of all saved credentials
+        """
+
+        self.assertEqual(Credential.display_credentials(), Credential.credential_list)
+
+
+    def test_copy_password(self):
+        """
+        test to confirm that we are copying the password from a found credential
+        """
+        self.new_credential.save_credential()
+        Credential.copy_password("Github")
+
+        self.assertEqual(self.new_credential.password,pyperclip.paster())
+
+
+    def test_generate_password(self):
+        """
+        test to confirm that the password we are generating is the desired length
+
+        """
+        self.new_credential.save_credential()
+        generated_password = Credential.generate_password(12)
+        test_credential = Credential("Bitbucket", "user2", "u@u.com",generated_password)
+
+
+        self.assertEqual(len(test_credential.password),12)
+
+if __name__ == "__main__":
+    unittest.main()
